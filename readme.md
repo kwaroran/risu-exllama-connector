@@ -1,3 +1,3 @@
 # Risu Exllama Connector
 
-A connector to exllama for RisuAI
+A connector to exllama for RisuAIgit add
