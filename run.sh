@@ -24,6 +24,9 @@ PIP="$(pwd)/venv/bin/pip"
 # install pytorch with cuda
 $PIP install torch torchvision torchaudio --upgrade -f https://download.pytorch.org/whl/cu117
 
+# install ninja
+$PIP install Ninja
+
 # install requirements
 $PIP install -r requirements.txt
 

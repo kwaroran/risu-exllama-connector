@@ -14,11 +14,13 @@ if exist ./venv (
 
 
 set PY="%cd%\venv\Scripts\python.exe"
-:: set venv pip location to var
 set PIP="%cd%\venv\Scripts\pip.exe"
 
 :: install pytorch with cuda
 call %PIP% install torch torchvision torchaudio --upgrade --index-url https://download.pytorch.org/whl/cu117
+
+:: install Ninja
+call %PIP% install ninja
 
 :: install requirements
 call %PIP% install -r requirements.txt
