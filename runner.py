@@ -13,27 +13,32 @@ model_name = ''
 mode = "local"
 origins = ["*"]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 @app.middleware("http")
-def keyloader(request: Request, call_next):
+async def keyloader(request: Request, call_next):
+    # allow preflight requests
+    if request.method == "OPTIONS":
+        response = Response()
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+        return response
     global mode
-    if mode == "local":
-        with open("key.txt", "r") as f:
-            key = f.read()
-        if request.headers["x-key"] == key:
-            return call_next(request)
-        else:
-            return Response("Unauthorized", status_code=401)
-    else:
-        return call_next(request)
+    with open("key.txt", "r") as f:
+        key = f.read()
 
+    if "x-risu-key" not in request.headers:
+        return Response("Unauthorized", status_code=401)
+
+    if request.headers["x-risu-key"] == key:
+        response = await call_next(request)
+        # set CORS headers
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+        return response
+    else:
+        return Response("Unauthorized", status_code=401)
 
 class LoaderItem(BaseModel):
     dir: str
