@@ -8,6 +8,8 @@ from typing import Union
 
 app = FastAPI()
 loaded = False
+model_name = ''
+mode = "local"
 
 class LoaderItem(BaseModel):
     dir: str
@@ -50,6 +52,10 @@ def loader(item: LoaderItem):
     # Directory containing model, tokenizer, generator
     dir = item.dir
     model_directory =  dir
+
+    # set model name
+    global model_name
+    model_name = os.path.basename(dir)
 
     # Locate files we need within that directory
 
@@ -167,5 +173,8 @@ async def generate(item: GeneratorItem):
 async def root():
     return {
         "status": "success",
-        "message": "ExLlama Risu API"
+        "message": "ExLlama Risu API",
+        "model": model_name,
+        "loaded": loaded,
+        "mode": mode
     }
