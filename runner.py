@@ -1,6 +1,7 @@
 from model import ExLlama, ExLlamaCache, ExLlamaConfig
 from tokenizer import ExLlamaTokenizer
 from generator import ExLlamaGenerator
+from fastapi.middleware.cors import CORSMiddleware
 import os, glob
 from pydantic import BaseModel
 from fastapi import FastAPI
@@ -10,6 +11,15 @@ app = FastAPI()
 loaded = False
 model_name = ''
 mode = "local"
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class LoaderItem(BaseModel):
     dir: str
