@@ -4,7 +4,7 @@ from generator import ExLlamaGenerator
 from fastapi.middleware.cors import CORSMiddleware
 import os, glob
 from pydantic import BaseModel
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from typing import Union
 
 app = FastAPI()
@@ -20,6 +20,20 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.middleware("http")
+def keyloader(request: Request, call_next):
+    global mode
+    if mode == "local":
+        with open("key.txt", "r") as f:
+            key = f.read()
+        if request.headers["x-key"] == key:
+            return call_next(request)
+        else:
+            return Response("Unauthorized", status_code=401)
+    else:
+        return call_next(request)
+
 
 class LoaderItem(BaseModel):
     dir: str
