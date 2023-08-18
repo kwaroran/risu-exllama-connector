@@ -22,13 +22,13 @@ PY="$(pwd)/venv/bin/python"
 PIP="$(pwd)/venv/bin/pip"
 
 # install pytorch with cuda
-$PIP install torch torchvision torchaudio --upgrade -f https://download.pytorch.org/whl/cu117
+$PY -m pip install torch torchvision torchaudio --upgrade -f https://download.pytorch.org/whl/cu117
 
 # install ninja
-$PIP install Ninja
+$PY -m pip install Ninja
 
 # install requirements
-$PIP install -r requirements.txt
+$PY -m pip install -r requirements.txt
 
 # run the Python program
 $PY main.py

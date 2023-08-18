@@ -17,11 +17,11 @@ set PY="%cd%\venv\Scripts\python.exe"
 set PIP="%cd%\venv\Scripts\pip.exe"
 
 :: install pytorch with cuda
-call %PIP% install torch torchvision torchaudio --upgrade --index-url https://download.pytorch.org/whl/cu117
+call %PY% -m pip install torch torchvision torchaudio --upgrade --index-url https://download.pytorch.org/whl/cu117
 
 :: install Ninja
-call %PIP% install ninja
+call %PY% -m pip install ninja
 
 :: install requirements
-call %PIP% install -r requirements.txt
+call %PY% -m pip install -r requirements.txt
 call %PY% main.py
